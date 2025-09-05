@@ -1,0 +1,35 @@
+/* Lab Explorers — script.js
+   - Interactive logic for kids science game
+   - Works with the Lab Explorers HTML + CSS
+*/
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Elements
+  const startButton = document.querySelector(".start-button");
+  const scoreElement = document.querySelector(".score");
+  const meterFill = document.querySelector(".progress .meter > i");
+  const labCards = document.querySelectorAll(".lab-card");
+  const tasks = document.querySelectorAll(".task");
+
+  // Game state
+  let score = 0;
+  let tasksCompleted = 0;
+  const maxScore = 100; // adjust to game length
+
+  /* --- Utility functions --- */
+  function updateScore(points) {
+    score = Math.min(score + points, maxScore);
+    scoreElement.textContent = `${score} pts`;
+
+    // Update progress bar
+    const percent = (score / maxScore) * 100;
+    meterFill.style.width = percent + "%";
+
+    // Unlock new experiments based on score
+    unlockExperiments();
+  }
+
+  function unlockExperiments() {
+    labCards.forEach((card, index) => {
+      const required = (index + 1) * 20; // e.g., unlock every 20 pts
+      if (score >= required && card.classList.contains("locked")) {
